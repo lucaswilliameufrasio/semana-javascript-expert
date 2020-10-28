@@ -1,0 +1,11 @@
+version: "3"
+services:
+  expert:
+    container_name: expert_container
+    image: node:12-buster
+    working_dir: /usr/app/expert
+    command: /bin/sh -c "apt-get update && apt-get -y install --no-install-recommends ffmpeg gpac && npx http-server ./ -p 8088"
+    volumes:
+      - ./:/usr/app/expert/
+    ports:
+        - "8088:8088"

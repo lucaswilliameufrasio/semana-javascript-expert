@@ -9,6 +9,7 @@ class VideoMediaPlayer {
     this.activeItem = {};
     this.selected = {};
     this.videoDuration = 0;
+    this.selections = [];
   }
 
   initializeCodec() {
@@ -56,7 +57,18 @@ class VideoMediaPlayer {
     this.videoComponent.configureModal(this.selected.options);
     this.activeItem = this.selected;
   }
+
+  async currentFileResolution() {
+    const LOWEST_RESOLUTION = 144;
+    const prepareUrl = {
+      url: this.manifestJSON.finalizar.url,
+      fileResolution: LOWEST_RESOLUTION,
+      fileResolutionTag: this.manifestJSON.fileResolutionTag,
+      hostTag: this.manifestJSON.hostTag,
     };
+
+    const url = this.network.parseManifestURL(prepareUrl);
+    return this.network.getProperResolution(url);
   }
 
   async nextChunk(data) {
@@ -67,14 +79,26 @@ class VideoMediaPlayer {
       //   adjust time to show modal, based on current video time
       at: parseInt(this.videoElement.currentTime + selected.at),
     };
+    this.manageLag(this.selected);
     // let the video run when the next video will be downloaded
     this.videoElement.play();
     await this.FileDownload(selected.url);
   }
+
+  manageLag(selected) {
+    if (!!~this.selections.indexOf(selected.url)) {
+      selected.at += 5;
+      return;
+    }
+
+    this.selections.push(selected.url);
+  }
+
   async FileDownload(url) {
+    const fileResolution = await this.currentFileResolution();
     const prepareUrl = {
       url,
-      fileResolution: 360,
+      fileResolution,
       fileResolutionTag: this.manifestJSON.fileResolutionTag,
       hostTag: this.manifestJSON.hostTag,
     };

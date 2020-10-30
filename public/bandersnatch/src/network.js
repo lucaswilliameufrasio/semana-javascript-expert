@@ -13,4 +13,32 @@ class Network {
     const response = await fetch(url);
     return response.arrayBuffer();
   }
+
+  async getProperResolution(url) {
+    const startMs = Date.now();
+    const response = await fetch(url);
+    await response.arrayBuffer();
+    const endMs = Date.now();
+    const durationMs = endMs - startMs;
+
+    // instead of calculate the throughput, we will calculate using the time
+    const resolutions = [
+      // worst scenario, 20 seconds
+      { start: 3001, end: 20000, resolution: 144 },
+      // lesser than 3 seconds
+      { start: 901, end: 3000, resolution: 360 },
+      // lesser than 1 second
+      { start: 0, end: 900, resolution: 720 },
+    ];
+
+    const item = resolutions.find((item) => {
+      return item.start <= durationMs && item.end >= durationMs;
+    });
+
+    const LOWEST_RESOLUTION = 144;
+    // if durationMs is greater than 30 seconds
+    if (!item) return LOWEST_RESOLUTION;
+
+    return item.resolution;
+  }
 }

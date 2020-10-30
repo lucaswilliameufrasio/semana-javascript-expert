@@ -54,7 +54,7 @@ class VideoMediaPlayer {
     const finalUrl = this.network.parseManifestURL(prepareUrl);
     this.setVideoPlayerDuration(finalUrl);
     const data = await this.network.fetchFile(finalUrl);
-    return this.processBufferSegments(data)
+    return this.processBufferSegments(data);
   }
 
   setVideoPlayerDuration(finalURL) {

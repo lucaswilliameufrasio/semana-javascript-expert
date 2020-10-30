@@ -1,0 +1,6 @@
+component: website
+name: assets
+stage: dev
+inputs:
+    src:
+        src: .

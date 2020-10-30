@@ -1,9 +1,12 @@
 class VideoMediaPlayer {
-  constructor({ manifestJSON, network }) {
+  constructor({ manifestJSON, network, videoComponent }) {
     this.manifestJSON = manifestJSON;
     this.network = network;
+    this.videoComponent = videoComponent;
+
     this.videoElement = null;
     this.sourceBuffer = null;
+    this.activeItem = {};
     this.selected = {};
     this.videoDuration = 0;
   }
@@ -40,9 +43,34 @@ class VideoMediaPlayer {
       // prevent running as "LIVE"
       mediaSource.duration = this.videoDuration;
       await this.FileDownload(selected.url);
+      setInterval(this.waitForQuestions.bind(this), 200);
     };
   }
 
+  waitForQuestions() {
+    const currentTime = parseInt(this.videoElement.currentTime);
+    const option = this.selected.at === currentTime;
+    if (!option) return;
+    // prevent modal to open twice
+    if (this.activeItem.url === this.selected.url) return;
+    this.videoComponent.configureModal(this.selected.options);
+    this.activeItem = this.selected;
+  }
+    };
+  }
+
+  async nextChunk(data) {
+    const key = data.toLowerCase();
+    const selected = this.manifestJSON[key];
+    this.selected = {
+      ...selected,
+      //   adjust time to show modal, based on current video time
+      at: parseInt(this.videoElement.currentTime + selected.at),
+    };
+    // let the video run when the next video will be downloaded
+    this.videoElement.play();
+    await this.FileDownload(selected.url);
+  }
   async FileDownload(url) {
     const prepareUrl = {
       url,
@@ -60,7 +88,7 @@ class VideoMediaPlayer {
   setVideoPlayerDuration(finalURL) {
     const bars = finalURL.split("/");
     const [, videoDuration] = bars[bars.length - 1].split("-");
-    this.videoDuration += videoDuration;
+    this.videoDuration += parseFloat(videoDuration);
   }
 
   async processBufferSegments(allSegments) {

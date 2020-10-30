@@ -17,3 +17,8 @@ sudo-up:
 sudo-down:
 	$ sudo docker-compose down
 .PHONY: sudo-down
+
+## Install dependencies
+install-deps:
+	$ apt-get update && apt-get -y install --no-install-recommends ffmpeg gpac
+.PHONY: install-deps

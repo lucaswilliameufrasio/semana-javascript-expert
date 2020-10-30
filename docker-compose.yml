@@ -4,8 +4,9 @@ services:
     container_name: expert_container
     image: node:12-buster
     working_dir: /usr/app/expert
-    command: /bin/sh -c "apt-get update && apt-get -y install --no-install-recommends ffmpeg gpac && npx http-server ./ -p 8088"
+    command: /bin/sh -c "make install-deps && npm run dev"
     volumes:
       - ./:/usr/app/expert/
     ports:
         - "8088:8088"
+        - "8089:8089"

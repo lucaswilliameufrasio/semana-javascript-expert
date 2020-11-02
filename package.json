@@ -4,6 +4,7 @@
   "description": "Projeto desenvolvido na Semana Javascript Expert com o professor Erick Wendel",
   "main": "index.js",
   "scripts": {
+    "start": "node src/server.js",
     "assets": "npx http-server ./assets --cors -p 8089",
     "public": "npx http-server ./public --cors -p 8088",
     "dev": "concurrently \"npm run assets\" \"npm run public\""

@@ -5,8 +5,9 @@ services:
     image: node:12-buster
     working_dir: /usr/app/expert
     command: /bin/sh -c "make install-deps && npm run dev"
+    environment:
+      - PORT=8787
     volumes:
       - ./:/usr/app/expert/
     ports:
-        - "8088:8088"
-        - "8089:8089"
+        - "8787:8787"

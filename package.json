@@ -11,6 +11,7 @@
   "author": "https://github.com/lucaswilliameufrasio",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^5.3.0"
+    "concurrently": "^5.3.0",
+    "express": "^4.17.1"
   }
 }

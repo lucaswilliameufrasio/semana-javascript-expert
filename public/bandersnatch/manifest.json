@@ -1,6 +1,6 @@
 {
     "hostTag": "$HOST",
-    "localHost": "http://127.0.0.1:8089/",
+    "localHost": "http://127.0.0.1:8089",
     "fileResolutionTag": "$RESOLUTION",
     "production": "",
     "codec": "video/mp4; codecs=\"avc1.64001F,mp4a.40.2\"",
